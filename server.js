@@ -56,7 +56,7 @@ app.post("/bruxos", (req, res) => {
     //Quais itens seriam obrigatorios?
     if (!nome || !casa) {
         return res.status(400).json({
-            sucess: false,
+            success: false,
             message: "Nome e casa são obrigatórios para um bruxo!"
         });
     }
@@ -117,10 +117,10 @@ app.get("/animais", (req, res) => {
     const { tipo, nome } = req.query;
     let animaisFiltros = animais;
     if (tipo) {
-        animaisFiltros = animaisFiltros.filter((t) => t.tipo.toLowerCase().includes(nome.toLowerCase()));
+        animaisFiltros = animaisFiltros.filter((t) => t.tipo.toLowerCase().includes(tipo.toLowerCase()));
     }
     if (nome) {
-        animaisFiltros = animaisFiltros.filter((n) => n.nome.toLowerCase().includes(efeito.toLowerCase()));
+        animaisFiltros = animaisFiltros.filter((n) => n.nome.toLowerCase().includes(nome.toLowerCase()));
     }
 
     res.status(200).json({
@@ -128,6 +128,35 @@ app.get("/animais", (req, res) => {
         data: animaisFiltros,
     });
 });
+
+app.post("/varinhas", (req, res) => {
+    const { material, nucleo, comprimento } = req.body;
+
+    //Quais itens seriam obrigatorios?
+    if (!material || !nucleo || !comprimento) {
+        return res.status(400).json({
+            success: false,
+            message: "Material, nucleo e comprimento são obrigatórios para varinha!"
+        });
+    }
+    //Criar nova varinha
+    const novaVarinha = {
+        id : varinhas.length + 1,
+        material,
+        nucleo,
+        comprimento
+    }
+
+    //Adiconar na lista
+    varinhas.push(novaVarinha);
+
+    res.status(201).json({
+        success: true,
+        message: "Nova varinha adicionada",
+        data: novaVarinha,
+    });
+});
+
 
 // Iniciar servidor escutando na porta definida
 app.listen(serverPort, () => {
